@@ -1,0 +1,893 @@
+<!DOCTYPE html>صانع الموقع مالك محمد السيد محمود النجار اعملو خمس نجوم علي موقعععع
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واحة القرآن للأطفال | المصحف الكامل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --accent: #f1c40f;
+            --danger: #e74c3c;
+            --bg-color: #f0f9f4;
+            --card-bg: #ffffff;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(#d4efdf 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stars-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--accent);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            width: 95%;
+            margin: 20px auto;
+            flex: 1;
+        }
+
+        /* Surah Selector & Search */
+        .surah-bar {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px solid var(--secondary);
+            font-size: 1.05rem;
+            font-weight: 700;
+            background: #f4faff;
+            color: var(--text-dark);
+            outline: none;
+            user-select: text;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: #ffffff;
+        }
+
+        select {
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px solid var(--primary);
+            font-size: 1.05rem;
+            font-weight: 700;
+            background: #f9fffb;
+            color: var(--text-dark);
+            cursor: pointer;
+            outline: none;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            border: none;
+            padding: 15px 10px;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            border-bottom: 4px solid #ddd;
+        }
+
+        .tab-btn span.icon {
+            font-size: 1.8rem;
+        }
+
+        .tab-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-bottom-color: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        /* Game Cards */
+        .game-section {
+            display: none;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .game-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-weight: 900;
+        }
+
+        .ayah-counter {
+            text-align: center;
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        /* Quran Text Styling */
+        .quran-text {
+            font-family: 'Amiri Quran', serif;
+            font-size: 2rem;
+            line-height: 2.3;
+            text-align: center;
+            color: #1a252f;
+        }
+
+        /* Section 1: Listen & Read */
+        .ayahs-scroll {
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-left: 5px;
+        }
+
+        .ayah-card {
+            background: #f8fcf9;
+            border: 2px solid #e8f5e9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .play-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .play-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Section 2: Writing Game */
+        .writing-box {
+            text-align: center;
+        }
+
+        .target-ayah {
+            background: #fff9e6;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .writing-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.6rem;
+            font-family: 'Amiri Quran', serif;
+            text-align: center;
+            border: 3px solid #ddd;
+            border-radius: 15px;
+            outline: none;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+            user-select: text;
+        }
+
+        .writing-input:focus {
+            border-color: var(--secondary);
+        }
+
+        /* Section 3: Order Game */
+        .drop-zone {
+            min-height: 80px;
+            background: #f4f7f6;
+            border: 3px dashed #bdc3c7;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .words-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .word-chip {
+            background: var(--accent);
+            color: var(--text-dark);
+            font-family: 'Amiri Quran', serif;
+            font-size: 1.6rem;
+            padding: 8px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #d4ac0d;
+            transition: transform 0.1s;
+        }
+
+        .word-chip:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .word-chip.in-zone {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 0 #2980b9;
+        }
+
+        /* Section 4: Recitation (Voice) */
+        .mic-container {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .mic-btn {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            border: none;
+            background: var(--danger);
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mic-btn.recording {
+            animation: pulse 1.2s infinite;
+            background: #c0392b;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(231, 76, 60, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .spoken-result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            min-height: 60px;
+            font-size: 1.3rem;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Action Buttons */
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 var(--primary-dark);
+            transition: all 0.2s;
+        }
+
+        .btn-action:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            box-shadow: 0 4px 0 #2980b9;
+        }
+
+        .btn-neutral {
+            background: #95a5a6;
+            box-shadow: 0 4px 0 #7f8c8d;
+        }
+
+        .feedback-msg {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+            min-height: 35px;
+        }
+
+        @media (max-width: 600px) {
+            .nav-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .quran-text {
+                font-size: 1.6rem;
+            }
+            .logo {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">🕌 واحة القرآن للأطفال (114 سورة)</div>
+        <div class="stars-badge">⭐ <span id="starCount">0</span></div>
+    </header>
+
+    <div class="container">
+        <div class="surah-bar">
+            <div class="search-group">
+                <span style="font-size: 1.3rem;">🔍</span>
+                <input type="text" id="surahSearch" class="search-input" placeholder="ابحث باسم السورة أو رقمها..." oninput="filterSurahs()">
+            </div>
+            <select id="surahSelect" onchange="loadSurahData()">
+                <option value="112">112. سورة الإخلاص</option>
+            </select>
+        </div>
+
+        <div id="loader" class="loader">⏳ جاري تحميل آيات السورة وتلاوتها...</div>
+
+        <div id="mainApp">
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('read', this)">
+                    <span class="icon">🎧</span>
+                    <span>استمع واقرأ</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('write', this)">
+                    <span class="icon">✍️</span>
+                    <span>لعبة الكتابة</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('order', this)">
+                    <span class="icon">🧩</span>
+                    <span>رتب الآية</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('recite', this)">
+                    <span class="icon">🎤</span>
+                    <span>تسميع السورة</span>
+                </button>
+            </div>
+
+            <!-- 1. الاستماع والقراءة -->
+            <div id="read" class="game-section active">
+                <h2 class="section-title">اضغط على السماعة للاستماع للآية</h2>
+                <div id="ayahsContainer" class="ayahs-scroll"></div>
+            </div>
+
+            <!-- 2. لعبة الكتابة -->
+            <div id="write" class="game-section">
+                <h2 class="section-title">اكتب الآية التالية بدون أخطاء</h2>
+                <div class="ayah-counter" id="writeCounter"></div>
+                <div class="writing-box">
+                    <div class="target-ayah quran-text" id="writeTargetAyah"></div>
+                    <input type="text" id="writeInput" class="writing-input" placeholder="اكتب الآية هنا..." autocomplete="off">
+                    <div class="controls-row">
+                        <button class="btn-action btn-neutral" onclick="prevWriteAyah()">⏮️ السابقة</button>
+                        <button class="btn-action" onclick="checkWriting()">تحقق ✅</button>
+                        <button class="btn-action btn-secondary" onclick="nextWriteAyah()">التالية ⏭️</button>
+                    </div>
+                    <div class="feedback-msg" id="writeFeedback"></div>
+                </div>
+            </div>
+
+            <!-- 3. لعبة ترتيب الكلمات -->
+            <div id="order" class="game-section">
+                <h2 class="section-title">اضغط على الكلمات بالترتيب الصحيح</h2>
+                <div class="ayah-counter" id="orderCounter"></div>
+                <div class="drop-zone" id="orderDropZone"></div>
+                <div class="words-pool" id="orderWordsPool"></div>
+                <div class="controls-row">
+                    <button class="btn-action btn-neutral" onclick="prevOrderAyah()">⏮️ السابقة</button>
+                    <button class="btn-action" onclick="checkOrder()">تحقق ✅</button>
+                    <button class="btn-action btn-neutral" onclick="initOrderGame()">إعادة 🔄</button>
+                    <button class="btn-action btn-secondary" onclick="nextOrderAyah()">التالية ⏭️</button>
+                </div>
+                <div class="feedback-msg" id="orderFeedback"></div>
+            </div>
+
+            <!-- 4. لعبة التسميع الصوتي -->
+            <div id="recite" class="game-section">
+                <h2 class="section-title">اقرأ الآية بصوتك الجميل</h2>
+                <div class="ayah-counter" id="reciteCounter"></div>
+                <div class="mic-container">
+                    <div class="target-ayah quran-text" id="reciteTargetAyah"></div>
+                    <button class="mic-btn" id="micBtn" onclick="toggleRecitation()">🎤</button>
+                    <p id="micStatus">اضغط على الميكروفون وابدأ القراءة</p>
+                    <div class="spoken-result" id="spokenResult">كلامك سيظهر هنا...</div>
+                    <div class="controls-row">
+                        <button class="btn-action btn-neutral" onclick="prevReciteAyah()">⏮️ السابقة</button>
+                        <button class="btn-action btn-secondary" onclick="nextReciteAyah()">التالية ⏭️</button>
+                    </div>
+                    <div class="feedback-msg" id="reciteFeedback"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allSurahs = [];
+        let currentAyahs = [];
+        let stars = 0;
+        let currentAudio = null;
+        let writeIndex = 0;
+        let orderIndex = 0;
+        let reciteIndex = 0;
+
+        // دالة إزالة التشكيل وتوحيد الحروف لتسهيل التصحيح والبحث
+        function normalizeArabic(text) {
+            return text
+                .replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, '')
+                .replace(/[أإآٱ]/g, 'ا')
+                .replace(/ى/g, 'ي')
+                .replace(/ة/g, 'ه')
+                .replace(/ـ/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function addStars(amount) {
+            stars += amount;
+            document.getElementById('starCount').innerText = stars;
+        }
+
+        // جلب قائمة الـ 114 سورة كاملة عند فتح الموقع
+        async function fetchSurahList() {
+            try {
+                const res = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await res.json();
+                allSurahs = data.data;
+                renderSurahOptions(allSurahs, 112);
+                loadSurahData();
+            } catch (err) {
+                alert('تأكد من اتصالك بالإنترنت لتحميل سور القرآن الكريم.');
+            }
+        }
+
+        // تعبئة القائمة المنسدلة بالسور
+        function renderSurahOptions(surahsList, selectedNumber = null) {
+            const select = document.getElementById('surahSelect');
+            select.innerHTML = '';
+
+            if (surahsList.length === 0) {
+                const option = document.createElement('option');
+                option.text = 'لا توجد سورة بهذا الاسم';
+                option.disabled = true;
+                select.appendChild(option);
+                return;
+            }
+
+            surahsList.forEach(surah => {
+                const option = document.createElement('option');
+                option.value = surah.number;
+                option.text = `${surah.number}. ${surah.name} (${surah.numberOfAyahs} آيات)`;
+                if (selectedNumber && surah.number === selectedNumber) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+        }
+
+        // البحث الفوري في السور بالاسم (بدون تشكيل) أو بالرقم
+        function filterSurahs() {
+            const query = normalizeArabic(document.getElementById('surahSearch').value);
+            const currentSelected = parseInt(document.getElementById('surahSelect').value);
+
+            const filtered = allSurahs.filter(surah => {
+                const cleanName = normalizeArabic(surah.name);
+                const surahNum = surah.number.toString();
+                return cleanName.includes(query) || surahNum.includes(query);
+            });
+
+            renderSurahOptions(filtered, filtered.length > 0 ? filtered[0].number : null);
+
+            // تحميل السورة تلقائياً إذا تغير الاختيار الأول بسبب البحث
+            if (filtered.length > 0 && filtered[0].number !== currentSelected) {
+                loadSurahData();
+            }
+        }
+
+        // تحميل آيات السورة المختارة + الصوت
+        async function loadSurahData() {
+            const surahNumber = document.getElementById('surahSelect').value;
+            if (!surahNumber) return;
+
+            const loader = document.getElementById('loader');
+            const mainApp = document.getElementById('mainApp');
+
+            loader.style.display = 'block';
+            mainApp.style.opacity = '0.4';
+
+            try {
+                const [textRes, audioRes] = await Promise.all([
+                    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/quran-uthmani`),
+                    fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/ar.alafasy`)
+                ]);
+
+                const textData = await textRes.json();
+                const audioData = await audioRes.json();
+
+                currentAyahs = textData.data.ayahs.map((ayah, index) => {
+                    let cleanText = ayah.text;
+                    if (surahNumber != 1 && surahNumber != 9 && index === 0) {
+                        cleanText = cleanText.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ ', '').trim();
+                    }
+                    return {
+                        numberInSurah: ayah.numberInSurah,
+                        text: cleanText,
+                        audio: audioData.data.ayahs[index].audio
+                    };
+                });
+
+                writeIndex = 0;
+                orderIndex = 0;
+                reciteIndex = 0;
+
+                renderReadSection();
+                initWriteGame();
+                initOrderGame();
+                initReciteGame();
+
+            } catch (err) {
+                alert('حدث خطأ أثناء تحميل السورة، حاول مرة أخرى.');
+            } finally {
+                loader.style.display = 'none';
+                mainApp.style.opacity = '1';
+            }
+        }
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.game-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // 1. قسم الاستماع والقراءة
+        function renderReadSection() {
+            const container = document.getElementById('ayahsContainer');
+            container.innerHTML = '';
+            currentAyahs.forEach((ayah) => {
+                const div = document.createElement('div');
+                div.className = 'ayah-card';
+                div.innerHTML = `
+                    <div class="quran-text">${ayah.text} ﴿${ayah.numberInSurah}﴾</div>
+                    <button class="play-btn" onclick="playAudio('${ayah.audio}')">🔊</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function playAudio(url) {
+            if (currentAudio) currentAudio.pause();
+            currentAudio = new Audio(url);
+            currentAudio.play();
+        }
+
+        // 2. لعبة الكتابة
+        function initWriteGame() {
+            if (!currentAyahs.length) return;
+            document.getElementById('writeCounter').innerText = `الآية ${writeIndex + 1} من ${currentAyahs.length}`;
+            document.getElementById('writeTargetAyah').innerText = currentAyahs[writeIndex].text;
+            document.getElementById('writeInput').value = '';
+            document.getElementById('writeFeedback').innerText = '';
+        }
+
+        function checkWriting() {
+            const userText = normalizeArabic(document.getElementById('writeInput').value);
+            const targetText = normalizeArabic(currentAyahs[writeIndex].text);
+            const feedback = document.getElementById('writeFeedback');
+
+            if (userText === targetText) {
+                feedback.style.color = 'var(--primary-dark)';
+                feedback.innerText = '🎉 أحسنت يا بطل! كتابة صحيحة +5 نجوم';
+                addStars(5);
+            } else {
+                feedback.style.color = 'var(--danger)';
+                feedback.innerText = '❌ حاول مرة أخرى، انتبه للحروف';
+            }
+        }
+
+        function nextWriteAyah() {
+            writeIndex = (writeIndex + 1) % currentAyahs.length;
+            initWriteGame();
+        }
+
+        function prevWriteAyah() {
+            writeIndex = (writeIndex - 1 + currentAyahs.length) % currentAyahs.length;
+            initWriteGame();
+        }
+
+        // 3. لعبة ترتيب الكلمات
+        let selectedWords = [];
+        function initOrderGame() {
+            if (!currentAyahs.length) return;
+            document.getElementById('orderCounter').innerText = `الآية ${orderIndex + 1} من ${currentAyahs.length}`;
+            
+            const words = currentAyahs[orderIndex].text
+                .split(' ')
+                .filter(w => normalizeArabic(w).length > 0);
+                
+            const shuffled = [...words].sort(() => Math.random() - 0.5);
+            selectedWords = [];
+
+            const dropZone = document.getElementById('orderDropZone');
+            const pool = document.getElementById('orderWordsPool');
+            dropZone.innerHTML = '';
+            pool.innerHTML = '';
+            document.getElementById('orderFeedback').innerText = '';
+
+            shuffled.forEach((word) => {
+                const chip = document.createElement('div');
+                chip.className = 'word-chip';
+                chip.innerText = word;
+                chip.onclick = () => toggleWord(chip, word);
+                pool.appendChild(chip);
+            });
+        }
+
+        function toggleWord(chip, word) {
+            const dropZone = document.getElementById('orderDropZone');
+            const pool = document.getElementById('orderWordsPool');
+
+            if (chip.parentElement === pool) {
+                chip.classList.add('in-zone');
+                dropZone.appendChild(chip);
+                selectedWords.push(word);
+            } else {
+                chip.classList.remove('in-zone');
+                pool.appendChild(chip);
+                const index = selectedWords.indexOf(word);
+                if (index > -1) selectedWords.splice(index, 1);
+            }
+        }
+
+        function checkOrder() {
+            const correctWords = currentAyahs[orderIndex].text
+                .split(' ')
+                .filter(w => normalizeArabic(w).length > 0)
+                .join(' ');
+            const userSentence = selectedWords.join(' ');
+            const feedback = document.getElementById('orderFeedback');
+
+            if (userSentence === correctWords) {
+                feedback.style.color = 'var(--primary-dark)';
+                feedback.innerText = '🌟 رائع! رتبت الآية بشكل صحيح +5 نجوم';
+                addStars(5);
+                setTimeout(() => nextOrderAyah(), 1500);
+            } else {
+                feedback.style.color = 'var(--danger)';
+                feedback.innerText = '🤔 الترتيب غير صحيح، حاول مجدداً';
+            }
+        }
+
+        function nextOrderAyah() {
+            orderIndex = (orderIndex + 1) % currentAyahs.length;
+            initOrderGame();
+        }
+
+        function prevOrderAyah() {
+            orderIndex = (orderIndex - 1 + currentAyahs.length) % currentAyahs.length;
+            initOrderGame();
+        }
+
+        // 4. لعبة التسميع الصوتي
+        let recognition;
+        let isRecording = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'ar-SA';
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                isRecording = true;
+                document.getElementById('micBtn').classList.add('recording');
+                document.getElementById('micStatus').innerText = 'جاري الاستماع... اقرأ الآن 🎙️';
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('spokenResult').innerText = transcript;
+                verifyRecitation(transcript);
+            };
+
+            recognition.onerror = () => {
+                document.getElementById('micStatus').innerText = 'حدث خطأ في الميكروفون، تأكد من السماح بالوصول للصوت.';
+                stopRecordingUI();
+            };
+
+            recognition.onend = () => stopRecordingUI();
+        }
+
+        function stopRecordingUI() {
+            isRecording = false;
+            document.getElementById('micBtn').classList.remove('recording');
+            document.getElementById('micStatus').innerText = 'اضغط على الميكروفون للقراءة مرة أخرى';
+        }
+
+        function initReciteGame() {
+            if (!currentAyahs.length) return;
+            document.getElementById('reciteCounter').innerText = `الآية ${reciteIndex + 1} من ${currentAyahs.length}`;
+            document.getElementById('reciteTargetAyah').innerText = currentAyahs[reciteIndex].text;
+            document.getElementById('spokenResult').innerText = 'كلامك سيظهر هنا...';
+            document.getElementById('reciteFeedback').innerText = '';
+        }
+
+        function toggleRecitation() {
+            if (!recognition) {
+                alert('متصفحك لا يدعم التعرف على الصوت، جرب متصفح جوجل كروم.');
+                return;
+            }
+            if (isRecording) recognition.stop();
+            else recognition.start();
+        }
+
+        function verifyRecitation(spokenText) {
+            const targetPlain = normalizeArabic(currentAyahs[reciteIndex].text);
+            const spokenPlain = normalizeArabic(spokenText);
+            const feedback = document.getElementById('reciteFeedback');
+
+            const targetWords = targetPlain.split(' ');
+            const spokenWords = spokenPlain.split(' ');
+            let matchCount = 0;
+
+            targetWords.forEach(word => {
+                if (spokenWords.includes(word)) matchCount++;
+            });
+
+            const accuracy = matchCount / targetWords.length;
+
+            if (accuracy >= 0.7) {
+                feedback.style.color = 'var(--primary-dark)';
+                feedback.innerText = '🏆 ما شاء الله! تسميع ممتاز +10 نجوم';
+                addStars(10);
+            } else {
+                feedback.style.color = 'var(--danger)';
+                feedback.innerText = 'حاول قراءة الآية بوضوح مرة أخرى';
+            }
+        }
+
+        function nextReciteAyah() {
+            reciteIndex = (reciteIndex + 1) % currentAyahs.length;
+            initReciteGame();
+        }
+
+        function prevReciteAyah() {
+            reciteIndex = (reciteIndex - 1 + currentAyahs.length) % currentAyahs.length;
+            initReciteGame();
+        }
+
+        window.onload = fetchSurahList;
+    </script>
+</body>
+</html>
